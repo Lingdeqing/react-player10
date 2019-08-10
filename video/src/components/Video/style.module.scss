@@ -1,0 +1,169 @@
+$br: 9px;
+$img-br: $br - 2px;
+$bottom-height: 44px;
+$bg: #000;
+.video {
+  &,
+  * {
+    box-sizing: border-box;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  position: relative;
+  padding-top: 56.25%;
+
+  // 不支持的样式
+  .notSupport {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    color: #fff;
+    background: $bg;
+    border-radius: $br;
+  }
+
+  // 视频
+  .videoWrapper {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+
+    video {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border: none;
+      outline: none;
+      box-shadow: none;
+      border-radius: $br;
+      background: $bg;
+    }
+  }
+
+  // 封面
+  .posterWrapper {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border: none;
+      outline: none;
+      box-shadow: none;
+      border-radius: $img-br;
+    }
+  }
+
+  // 遮罩
+  .mask {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+  }
+
+  // 中间控件
+  .loading{
+    z-index: 1;
+    width: 35px;
+    height: 35px;
+    background: url("../../images/loading.gif");
+    background-size: cover;
+  }
+  // 播放
+  .play, .stop, .replay{
+    cursor: pointer;
+    width: 60px;
+    height: 60px;
+    border-radius: 30px;
+    background-size: cover;
+  }
+  .play{
+    background-image: url("../../images/suspended@2x.png");
+    background-image: -webkit-image-set(url("../../images/suspended@2x.png") 2x, url("../../images/suspended@3x.png") 3x);
+  }
+  // 停止
+  .stop{
+    background-image: url("../../images/play@2x.png");
+    background-image: -webkit-image-set(url("../../images/play@2x.png") 2x, url("../../images/play@3x.png") 3x);
+  }
+  // 重播
+  .replay{
+    background-image: url("../../images/replay@2x.png");
+    background-image: -webkit-image-set(url("../../images/replay@2x.png") 2x, url("../../images/replay@3x.png") 3x);
+  }
+  // 出错了
+  .error{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background: $bg;
+    border-radius: $br;
+    font-size: 16px;
+    z-index: 1;
+    color: #ffcf00;
+    text-shadow: 0 0 3px red;
+    font-weight: 100;
+  }
+
+  // 底部按钮栏
+  .bottomWrapper {
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: $bottom-height;
+    overflow: hidden;
+    border-radius: 0 0 $br $br;
+    transform: translateZ(0); //防止 ios app 中底部圆角overflow hidden控件栏会有漏出
+
+    .bottom {
+      display: flex;
+      height: $bottom-height;
+      padding: 0 12px;
+      background-image: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.7) 100%);
+      transition: all 0.4s linear;
+      opacity: 1;
+
+      &.hide {
+        margin-top: $bottom-height;
+        opacity: 0;
+      }
+
+      .currentTime,
+      .totalTime {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+        flex: none;
+        color: #fff;
+        white-space: nowrap;
+        font-size: 13px;
+        width: 38px;
+      }
+      .currentTime {
+        text-align: right;
+      }
+    }
+  }
+}
