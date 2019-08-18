@@ -1,5 +1,11 @@
 export const uaText = window.navigator.userAgent;
-export const android = /Android/.test(uaText);
-export const iOS = /(iPad|iPhone|iPod)\s+OS\s([\d_.]+)/.test(uaText);
+export const isIosApp = uaText.match(/iOS/);
+export const isAndroidApp = Boolean(uaText.match(/^Android-/));
+export const isApp = (isAndroidApp || isIosApp);
+const android = /Android/.test(uaText);
+const iOS = /(iPad|iPhone|iPod)\s+OS\s([\d_.]+)/.test(uaText);
 export const isMobile = android || iOS;
 export const isPc = !isMobile;
+export const isWx = /MicroMessenger/i.test(uaText);
+export const isIosWx = iOS && isWx;
+export const isAndroidWx = android && isWx;

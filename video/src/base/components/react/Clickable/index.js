@@ -1,7 +1,7 @@
 import React from "react";
 import classnames from "classnames";
 // import $ from "zepto";
-import { isMobile } from "../../../utils/ua";
+import { isMobile, isIosApp } from "../../../utils/ua";
 import styles from "./style.module.scss";
 
 export default class Clickable extends React.Component {
@@ -37,7 +37,9 @@ export default class Clickable extends React.Component {
 
     onTouchEnd = (e) => {
         if (!this.touchMove) {
-            // this.useMask();
+            if (isIosApp) {
+                this.useMask();
+            }
             this.handleClick(e);
         }
 
@@ -46,26 +48,13 @@ export default class Clickable extends React.Component {
     }
 
     useMask = () => {
-        // if(!this.$mask){
-        //     const $p = this.$el.parent();
-        //     this.$mask = $('<div style="position:absolute;">');
-        //     this.$el.before(this.$mask);
-        //     if($p.css('position') === 'static'){
-        //         $p.css('position', 'relative');
-        //     }
-        //     if(this.$el.css('position') === 'static'){
-        //         this.$el.css('position', 'relative');
-        //     }
-        // }
-
-        // const offset = this.$el.position();
-        // this.$mask.css({
-        //     left: offset.left,
-        //     top: offset.top,
-        //     width: this.$el.width(),
-        //     height: this.$el.height(),
-        // })
-        // this.$mask.show();
+        this.mask = document.createElement('div');
+        this.mask.setAttribute('style',
+            `position:fixed;left:0;width:${window.innerWidth}px;top:0;height:${window.innerHeight}px;background:transparent;z-index:100000;user-select: none;-webkit-tap-highlight-color: transparent;`);
+        document.body.appendChild(this.mask);
+        setTimeout(() => {
+            document.body.removeChild(this.mask);
+        }, 500)
     }
 
     getTagAttr = (keys) => {
@@ -77,24 +66,32 @@ export default class Clickable extends React.Component {
             }, {});
     }
 
+    getRef = (r) => {
+        const { getEl } = this.props;
+        getEl && getEl(r);
+        this.el = r;
+    }
+
     render() {
         const { children, className, tagName = 'div' } = this.props;
         const Tag = tagName;
         if (isMobile) {
             return (
-                <Tag {...this.getTagAttr(["onTap", "onTouchStart", "onTouchMove", "onTouchend", "className"])}
+                <Tag {...this.getTagAttr(["getEl", "onTap", "onTouchStart", "onTouchMove", "onTouchend", "className"])}
                     className={classnames(styles.clickable, className)}
                     onTouchStart={this.onTouchStart}
                     onTouchMove={this.onTouchMove}
-                    onTouchEnd={this.onTouchEnd}>
+                    onTouchEnd={this.onTouchEnd}
+                    ref={this.getRef}>
                     {children}
                 </Tag>
             )
         }
         return (
-            <Tag {...this.getTagAttr(["onTap", "className"])}
+            <Tag {...this.getTagAttr(["getEl", "onTap", "className"])}
                 className={classnames(styles.clickable, className)}
-                onClick={this.handleClick}>
+                onClick={this.handleClick}
+                ref={this.getRef}>
                 {children}
             </Tag>
         )

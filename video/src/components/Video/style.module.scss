@@ -8,10 +8,27 @@ $bg: #000;
     box-sizing: border-box;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
+    touch-action: none;
   }
 
   position: relative;
   padding-top: 56.25%;
+
+  // 模拟全屏
+  &.fill{
+    position: fixed;
+    z-index: 10000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+  }
+  &.fullscreen{
+    .videoWrapper video{
+      border-radius: 0;
+    }
+  }
 
   // 不支持的样式
   .notSupport {
@@ -80,7 +97,7 @@ $bg: #000;
   }
 
   // 中间控件
-  .loading{
+  .loading {
     z-index: 1;
     width: 35px;
     height: 35px;
@@ -88,29 +105,42 @@ $bg: #000;
     background-size: cover;
   }
   // 播放
-  .play, .stop, .replay{
+  .play,
+  .stop,
+  .replay {
     cursor: pointer;
     width: 60px;
     height: 60px;
     border-radius: 30px;
     background-size: cover;
   }
-  .play{
+  .play {
     background-image: url("../../images/suspended@2x.png");
-    background-image: -webkit-image-set(url("../../images/suspended@2x.png") 2x, url("../../images/suspended@3x.png") 3x);
+    background-image: -webkit-image-set(
+      url("../../images/suspended@2x.png") 2x,
+      url("../../images/suspended@3x.png") 3x
+    );
   }
   // 停止
-  .stop{
+  .stop {
     background-image: url("../../images/play@2x.png");
     background-image: -webkit-image-set(url("../../images/play@2x.png") 2x, url("../../images/play@3x.png") 3x);
   }
+  .play,
+  .stop {
+    transition: opacity 0.4s linear;
+    opacity: 1;
+    &.hide {
+      opacity: 0;
+    }
+  }
   // 重播
-  .replay{
+  .replay {
     background-image: url("../../images/replay@2x.png");
     background-image: -webkit-image-set(url("../../images/replay@2x.png") 2x, url("../../images/replay@3x.png") 3x);
   }
   // 出错了
-  .error{
+  .error {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -140,14 +170,22 @@ $bg: #000;
     .bottom {
       display: flex;
       height: $bottom-height;
-      padding: 0 12px;
+      padding: 0 0 0 12px;
       background-image: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.7) 100%);
-      transition: all 0.4s linear;
+      transition: opacity 0.4s linear;
       opacity: 1;
 
       &.hide {
-        margin-top: $bottom-height;
+        // margin-top: $bottom-height;
         opacity: 0;
+      }
+      &.notStart {
+        padding-right: 12px;
+        .currentTime,
+        .progress,
+        .zoomBtn{
+          display: none;
+        }
       }
 
       .currentTime,
@@ -164,6 +202,37 @@ $bg: #000;
       .currentTime {
         text-align: right;
       }
+
+      // 全屏
+      .zoomBtn{
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+        user-select: none;
+        flex: none;
+        width: 47px;
+        padding: 10px 12px 10px 11px;
+        // background: red;
+      }
+      &.notSuportZoom{
+        padding-right: 12px;
+        .zoomBtn{
+          display: none;
+        }
+
+      }
+      .zoomIcon {
+        width: 24px;
+        height: 24px;
+        background: url("../../images/fullscreen@2x.png");
+        background-image: -webkit-image-set(url("../../images/fullscreen@2x.png") 2x, url("../../images/fullscreen@3x.png") 3x);
+        background-size: cover;
+      }
     }
+  }
+
+  &.fullscreen .bottomWrapper .zoomIcon {
+    background: url("../../images/inline@2x.png");
+    background-image: -webkit-image-set(url("../../images/inline@2x.png") 2x, url("../../images/inline@3x.png") 3x);
+    background-size: cover;
   }
 }
