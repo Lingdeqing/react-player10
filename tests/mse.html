@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <video ></video>
+    <script>
+        // navigator.webkitGetUserMedia
+        var mse = new MediaSource();
+        var video = document.querySelector('video');
+        var url = URL.createObjectURL(mse);
+        video.src = url;
+        mse.addEventListener('sourceopen', sourceOpen)
+        function sourceOpen(){
+            var mime = 'video/mp4; codecs="avc1.42E01E, mp4a.40.2"'
+            var sourceBuffer = mse.addSourceBuffer(mime);
+
+            fetchBuffer('./1-0-5.mp4', function(buffer){
+                sourceBuffer.appendBuffer(buffer);
+            })
+        }
+        function fetchBuffer(url, callback){
+            var xhr = new XMLHttpRequest;
+            xhr.open('GET', url);
+            xhr.responseType = 'arraybuffer';
+            xhr.onload = function(){
+                callback(xhr.response);
+            }
+            xhr.send();
+        }
+    </script>
+</body>
+</html>
